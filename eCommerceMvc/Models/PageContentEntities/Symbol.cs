@@ -1,4 +1,4 @@
-﻿namespace eCommerceMvc.Models
+﻿namespace eCommerceMvc.Models.PageContentEntities
 {
     public class Symbol
     {

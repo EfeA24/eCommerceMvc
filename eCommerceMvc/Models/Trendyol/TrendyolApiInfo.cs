@@ -6,7 +6,7 @@
         Production = 1
     }
 
-    public class ApiInfo
+    public class TrendyolApiInfo
     {
         public string SellerId { get; set; } = null!;
         public string ApiKey { get; set; } = null!;
@@ -17,6 +17,8 @@
         public string StageBaseUrl { get; set; } = "https://stageapigw.trendyol.com";
         public bool StageIpAuthorized { get; set; }
         public string? StageAuthorizedIp { get; set; }
+        public bool CanReadProducts { get; set; } = true;
+        public bool CanCreateProducts { get; set; } = true;
 
         public string BaseUrl => Environment == TrendyolEnvironment.Stage ? StageBaseUrl : ProductionBaseUrl;
         public string UserAgent => $"{SellerId} - {IntegratorName}";
