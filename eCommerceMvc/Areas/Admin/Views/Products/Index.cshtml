@@ -1,0 +1,56 @@
+@using eCommerceMvc.Models.Shopify
+@using eCommerceMvc.Models.Trendyol
+@using eCommerceMvc.Models.Sync
+@{
+    ViewData["Title"] = "Products";
+    var trendyolProducts = (IEnumerable<TrendyolProduct>)ViewBag.TrendyolProducts;
+    var shopifyProducts = (IEnumerable<ShopifyProduct>)ViewBag.ShopifyProducts;
+    var trendyolStores = (IEnumerable<TrendyolStoreConnection>)ViewBag.TrendyolStores;
+    var shopifyStores = (IEnumerable<ShopifyStoreConnection>)ViewBag.ShopifyStores;
+}
+
+<h1 class="h3 mb-3">Products & Sync</h1>
+@if (TempData["SyncMessage"] is string msg)
+{
+    <div class="alert alert-info">@msg</div>
+}
+<div class="row g-4">
+    <div class="col-md-6">
+        <h2 class="h5">Trendyol Sync</h2>
+        @foreach (var store in trendyolStores)
+        {
+            <form asp-area="Admin" asp-controller="Products" asp-action="SyncTrendyol" asp-route-storeId="@store.Id" method="post" class="mb-2">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-outline-primary btn-sm" type="submit">Sync @store.StoreName</button>
+            </form>
+        }
+        <table class="table table-sm table-striped">
+            <thead><tr><th>Title</th><th>Barcode</th><th>Updated</th></tr></thead>
+            <tbody>
+            @foreach (var item in trendyolProducts)
+            {
+                <tr><td>@item.Title</td><td>@item.Barcode</td><td>@item.UpdatedAtUtc</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h2 class="h5">Shopify Sync</h2>
+        @foreach (var store in shopifyStores)
+        {
+            <form asp-area="Admin" asp-controller="Products" asp-action="SyncShopify" asp-route-storeId="@store.Id" method="post" class="mb-2">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-outline-primary btn-sm" type="submit">Sync @store.StoreName</button>
+            </form>
+        }
+        <table class="table table-sm table-striped">
+            <thead><tr><th>Title</th><th>Handle</th><th>Updated</th></tr></thead>
+            <tbody>
+            @foreach (var item in shopifyProducts)
+            {
+                <tr><td>@item.Title</td><td>@item.Handle</td><td>@item.UpdatedAtUtc</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

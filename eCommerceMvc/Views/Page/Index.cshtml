@@ -1,0 +1,51 @@
+@model eCommerceMvc.Models.PageContentEntities.PageBuilderIndexViewModel
+
+@{
+    ViewData["Title"] = "Pages";
+    if (Context.Request.Path.StartsWithSegments("/admin"))
+    {
+        Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Page Builder</h1>
+    <a asp-area="Admin" asp-controller="PageBuilder" asp-action="Create" class="btn btn-primary">Create Page</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Status</th>
+            <th>Updated</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (!Model.Pages.Any())
+    {
+        <tr>
+            <td colspan="5">No page content found.</td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var item in Model.Pages)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Slug</td>
+                <td>@item.Status</td>
+                <td>@item.UpdatedAt.ToLocalTime().ToString("g")</td>
+                <td class="text-end">
+                    <a asp-area="Admin" asp-controller="PageBuilder" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a asp-area="Admin" asp-controller="PageBuilder" asp-action="Preview" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Preview</a>
+                    <a asp-area="" asp-controller="PagePublic" asp-action="Details" asp-route-slug="@item.Slug" class="btn btn-sm btn-outline-dark">Public</a>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

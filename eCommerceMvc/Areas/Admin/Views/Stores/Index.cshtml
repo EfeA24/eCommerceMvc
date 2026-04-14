@@ -1,0 +1,60 @@
+@using eCommerceMvc.Models.Sync
+@{
+    ViewData["Title"] = "Stores";
+    var trendyolStores = (IEnumerable<TrendyolStoreConnection>)ViewBag.TrendyolStores;
+    var shopifyStores = (IEnumerable<ShopifyStoreConnection>)ViewBag.ShopifyStores;
+}
+
+<h1 class="h3 mb-3">Store Connections</h1>
+<div class="row g-4">
+    <div class="col-md-6">
+        <h2 class="h5">Add Trendyol Store</h2>
+        <form asp-area="Admin" asp-controller="Stores" asp-action="CreateTrendyol" method="post" class="border rounded p-3">
+            @Html.AntiForgeryToken()
+            <input class="form-control mb-2" name="StoreName" placeholder="Store Name" />
+            <input class="form-control mb-2" name="SupplierId" placeholder="Supplier Id" />
+            <input class="form-control mb-2" name="ApiKey" placeholder="API Key" />
+            <input class="form-control mb-2" name="ApiSecretKey" placeholder="API Secret" />
+            <input class="form-control mb-2" name="IntegratorName" placeholder="Integrator Name" value="eCommerceMvc" />
+            <select class="form-select mb-2" name="Environment">
+                <option value="0">Stage</option>
+                <option value="1">Production</option>
+            </select>
+            <button class="btn btn-primary" type="submit">Save Trendyol Store</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h2 class="h5">Add Shopify Store</h2>
+        <form asp-area="Admin" asp-controller="Stores" asp-action="CreateShopify" method="post" class="border rounded p-3">
+            @Html.AntiForgeryToken()
+            <input class="form-control mb-2" name="StoreName" placeholder="Store Name" />
+            <input class="form-control mb-2" name="ShopDomain" placeholder="yourshop.myshopify.com" />
+            <input class="form-control mb-2" name="AccessToken" placeholder="Access Token" />
+            <input class="form-control mb-2" name="ApiVersion" value="2025-10" />
+            <button class="btn btn-primary" type="submit">Save Shopify Store</button>
+        </form>
+    </div>
+</div>
+
+<hr />
+<h2 class="h5">Trendyol Stores</h2>
+<table class="table table-sm table-striped">
+    <thead><tr><th>Store</th><th>Supplier</th><th>Verified</th><th>Last Sync</th></tr></thead>
+    <tbody>
+    @foreach (var item in trendyolStores)
+    {
+        <tr><td>@item.StoreName</td><td>@item.SupplierId</td><td>@item.IsVerified</td><td>@item.LastProductSyncAtUtc</td></tr>
+    }
+    </tbody>
+</table>
+
+<h2 class="h5">Shopify Stores</h2>
+<table class="table table-sm table-striped">
+    <thead><tr><th>Store</th><th>Domain</th><th>Verified</th><th>Last Sync</th></tr></thead>
+    <tbody>
+    @foreach (var item in shopifyStores)
+    {
+        <tr><td>@item.StoreName</td><td>@item.ShopDomain</td><td>@item.IsVerified</td><td>@item.LastProductSyncAtUtc</td></tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,13 @@
+@model eCommerceMvc.Areas.Admin.Models.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="h3 mb-3">Admin Dashboard</h1>
+<div class="row g-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted">Trendyol Stores</div><div class="h4">@Model.TrendyolStoreCount</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted">Shopify Stores</div><div class="h4">@Model.ShopifyStoreCount</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted">Pages</div><div class="h4">@Model.PageCount</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted">Sync Logs</div><div class="h4">@Model.SyncLogCount</div></div></div></div>
+</div>

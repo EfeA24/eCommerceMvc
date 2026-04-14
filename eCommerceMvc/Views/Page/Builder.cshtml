@@ -1,0 +1,76 @@
+@model eCommerceMvc.Models.PageContentEntities.PageBuilderFormViewModel
+
+@{
+    ViewData["Title"] = Model.Id.HasValue ? "Edit Page" : "Create Page";
+    if (Context.Request.Path.StartsWithSegments("/admin"))
+    {
+        Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+
+<link rel="stylesheet" href="~/css/page-builder.css" asp-append-version="true" />
+
+<h1 class="h3 mb-3">@ViewData["Title"]</h1>
+
+<form asp-area="Admin" asp-controller="PageBuilder" asp-action="Save" method="post" id="pageBuilderForm" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="LayoutJson" id="layoutJsonInput" />
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-5">
+            <label asp-for="Title" class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-5">
+            <label asp-for="Slug" class="form-label">Slug</label>
+            <input asp-for="Slug" class="form-control" />
+            <span asp-validation-for="Slug" class="text-danger"></span>
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Status" class="form-label">Status</label>
+            <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<eCommerceMvc.Models.PageContentEntities.PageStatus>()"></select>
+        </div>
+    </div>
+
+    <div class="builder-layout">
+        <aside class="builder-sidebar">
+            <h2 class="h6">Blocks</h2>
+            <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="button" data-add-block="text">Add Text</button>
+            <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="button" data-add-block="image">Add Image</button>
+            <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="button" data-add-block="button">Add Button</button>
+            <button class="btn btn-sm btn-outline-secondary w-100" type="button" id="addSectionButton">Add Section</button>
+        </aside>
+
+        <section class="builder-canvas-wrap">
+            <div id="builderCanvas" class="builder-canvas"></div>
+        </section>
+
+        <aside class="builder-sidebar">
+            <h2 class="h6">Properties</h2>
+            <div id="blockProperties" class="small text-muted">Select a block to edit properties.</div>
+        </aside>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-success">Save</button>
+        @if (Model.Id.HasValue)
+        {
+            <a asp-area="Admin" asp-controller="PageBuilder" asp-action="Preview" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Preview</a>
+        }
+        <a asp-area="Admin" asp-controller="PageBuilder" asp-action="Index" class="btn btn-outline-dark">Back</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        window.pageBuilderConfig = {
+            initialLayoutJson: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.LayoutJson)),
+            uploadImageUrl: '@Url.Action("UploadImage", "Media", new { area = "Admin" })',
+            antiForgeryToken: document.querySelector('input[name="__RequestVerificationToken"]').value
+        };
+    </script>
+    <script src="~/js/page-builder.js" asp-append-version="true"></script>
+}

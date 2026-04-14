@@ -1,0 +1,21 @@
+@model eCommerceMvc.Models.PageContentEntities.PageRenderViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+    if (Context.Request.Path.StartsWithSegments("/admin"))
+    {
+        Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+
+<link rel="stylesheet" href="~/css/page-builder.css" asp-append-version="true" />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">@Model.Title</h1>
+    @if (Model.IsPreview)
+    {
+        <a asp-area="Admin" asp-controller="PageBuilder" asp-action="Index" class="btn btn-sm btn-outline-dark">Back to Pages</a>
+    }
+</div>
+
+@Html.Raw(Model.RenderedHtml)

@@ -1,0 +1,30 @@
+@model IEnumerable<eCommerceMvc.Models.Sync.SyncLog>
+
+@{
+    ViewData["Title"] = "Sync Center";
+}
+
+<h1 class="h3 mb-3">Sync Center</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>When</th>
+            <th>Channel</th>
+            <th>Operation</th>
+            <th>Success</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CreatedAt.ToLocalTime().ToString("g")</td>
+            <td>@item.Channel</td>
+            <td>@item.Operation</td>
+            <td>@item.IsSuccess</td>
+            <td>@item.Message</td>
+        </tr>
+    }
+    </tbody>
+</table>
